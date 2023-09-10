@@ -1,0 +1,22 @@
+receivers:
+  otlp/app:
+    protocols:
+      grpc:
+      http:
+exporters:
+  loki:
+    endpoint: ${env:LOGS_ENDPOINT}
+    auth:
+      authenticator: basicauth/logs
+extensions:
+  basicauth/logs:
+    client_auth:
+      username: "${env:LOGS_USERNAME}"
+      password: "${env:LOGS_PWD}"
+service:
+  extensions: [basicauth/logs]
+  pipelines:
+    logs/gc:
+      receivers:
+        - otlp/app
+      exporters: [loki]
