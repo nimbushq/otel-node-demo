@@ -2,10 +2,12 @@
 const { NodeSDK } = require('@opentelemetry/sdk-node');
 const {
   SimpleLogRecordProcessor,
-  ConsoleLogRecordExporter,
 } = require('@opentelemetry/sdk-logs');
+const {
+  OTLPLogsExporter
+} = require('@opentelemetry/exporter-logs-otlp-proto');
 
 const sdk = new NodeSDK({
-  logRecordProcessor: new SimpleLogRecordProcessor(new ConsoleLogRecordExporter()),
+  logRecordProcessor: new SimpleLogRecordProcessor(new OTLPLogsExporter()),
 });
 sdk.start();
