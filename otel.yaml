@@ -8,7 +8,7 @@ processors:
     attributes:
       - action: insert
         key: loki.resource.labels
-        value: service.name
+        value: service.name, service.version
   attributes/loki:
     actions:
       - action: insert

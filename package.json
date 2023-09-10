@@ -12,8 +12,10 @@
   "dependencies": {
     "@opentelemetry/api": "^1.4.1",
     "@opentelemetry/exporter-logs-otlp-proto": "^0.41.2",
+    "@opentelemetry/resources": "^1.15.2",
     "@opentelemetry/sdk-logs": "^0.41.2",
     "@opentelemetry/sdk-node": "^0.41.2",
+    "@opentelemetry/semantic-conventions": "^1.15.2",
     "express": "^4.18.2"
   }
 }
