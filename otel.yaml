@@ -3,6 +3,17 @@ receivers:
     protocols:
       grpc:
       http:
+processors:
+  resource/loki:
+    attributes:
+      - action: insert
+        key: loki.resource.labels
+        value: service.name
+  attributes/loki:
+    actions:
+      - action: insert
+        key: loki.attribute.labels
+        value: roll
 exporters:
   loki:
     endpoint: ${env:LOGS_ENDPOINT}
@@ -19,4 +30,5 @@ service:
     logs/gc:
       receivers:
         - otlp/app
+      processors: [resource/loki, attributes/loki]
       exporters: [loki]
