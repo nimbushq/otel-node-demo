@@ -3,6 +3,7 @@ receivers:
     protocols:
       grpc:
       http:
+      
 processors:
   resource/loki:
     attributes:
@@ -19,16 +20,33 @@ exporters:
     endpoint: ${env:LOGS_ENDPOINT}
     auth:
       authenticator: basicauth/logs
+  otlp/traces:
+    endpoint: ${env:TRACES_ENDPOINT}
+    tls:
+      insecure: false
+    auth:
+      authenticator: basicauth/traces
+  file:
+    path: /tmp/out.txt
+    format: json
 extensions:
   basicauth/logs:
     client_auth:
       username: "${env:LOGS_USERNAME}"
       password: "${env:LOGS_PWD}"
+  basicauth/traces:
+    client_auth:
+      username: "${env:TRACES_USERNAME}"
+      password: "${env:TRACES_PWD}"
 service:
-  extensions: [basicauth/logs]
+  extensions: [basicauth/logs, basicauth/traces]
   pipelines:
     logs/gc:
       receivers:
         - otlp/app
       processors: [resource/loki, attributes/loki]
       exporters: [loki]
+    traces/gc:
+      receivers:
+        - otlp/app
+      exporters: [otlp/traces, file]
